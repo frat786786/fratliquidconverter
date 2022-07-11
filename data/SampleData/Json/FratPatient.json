@@ -1,0 +1,36 @@
+{
+    "PatientId": 12434,
+    "MRN": "M0R1N2",
+    "FirstName": "Jerry",
+    "LastName": "Smith",
+    "Phone Number": [
+        {
+            "PhoneType": "office",
+            "Phone": 11111111
+        },
+        {
+            "PhoneType": "home",
+            "Phone": 2222222
+        },
+        {
+            "PhoneType": "fax",
+            "Phone": 6666
+        }
+    ],
+    "Address": [
+        {
+            "Type": "home",
+            "Street": "Test Street 1",
+            "City": "NYC",
+            "ZipCode": 10000
+        },
+        {
+            "Type": "home",
+            "Street": "Test Street 1",
+            "City": "NYC",
+            "ZipCode": 10000
+        }
+    ],
+    "Gender": "M",
+    "DOB": "20010110"
+}
