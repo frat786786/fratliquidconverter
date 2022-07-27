@@ -1,64 +1,89 @@
 {
-    "resourceType": "Patient",
-    "id": "{{ msg.PatientId | to_json_string | generate_uuid }}",
-    "identifier": [
-        {
-            "use": "usual",
-            "type": {
-                "coding": [
-                    {
-                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
-                        "code": "MR"
-                    }
+  "resourceType": "Patient",
+  "id": "{{ msg.PatientId | to_json_string | generate_uuid }}",
+  "identifier": [
+	 {
+		"use": "usual",
+		"type": {
+			 "coding": [
+			 {
+				 "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+				 "code": "MR"
+			 }
                 ]
             },
-            "system": "urn:oid:2.16.840.1.113883.19.5",
-            "value": "{{ msg.MRN }}"
+         
+            "value": "{{ msg.CENSEOID }}"
+        },
+		 {
+		"use": "usual",
+		"type": {
+			 "coding": [
+			 {
+				 "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+				 "code": "SS"
+			 }
+                ]
+            },
+         
+            "value": "{{ msg.MEMBER_SSN }}"
         }
     ],
     "active": true,
     "name": [
         {
-            "family": "{{ msg.LastName }}",
+            "family": "{{ msg.MEMBER_LAST_NAME }}",
             "given": [
-                "{{ msg.FirstName }}"
-            ]
+                "{{ msg.MEMBER_FIRST_NAME }}"
+            ],
+            "suffix": [
+                "{{ msg.SUFFIX }}"
+            ],
+
         }
     ],
     "telecom": [
-        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
-        {% for p in msg["Phone Number"] -%}
         {
-            "system": "{{ p.PhoneType}}",
-            "value": "{{p.Phone}}",
+            "system": "home",
+            "value": "{{msg.MEMBER_CELL}}",
             },
-        {% endfor -%}
+ 		{
+            "system": "email",
+            "value": "{{msg.MEMBER_EMAIL}}",
+            },
+
     ],
  "gender":   
-        {% if msg.Gender == 'M' -%}
+        {% if msg.MEMBER_GENDER == '1' -%}
 	        "male",
-        {% elsif msg.Gender == 'F' -%}
+        {% elsif msg.MEMBER_GENDER == '2' -%}
 	        "female",
-        {% elsif msg.Gender == 'U' -%}
+        {% elsif msg.MEMBER_GENDER == '3' -%}
 	        "unknown",
         {% elsif code -%}
 .	        "other",
         {% else %}
             "",
         {% endif -%}
-    "birthDate": "{{ msg.DOB | add_hyphens_date }}",
+    "birthDate": "{{ msg.MEMBER_DATE_OF_BIRTH  }}",
     "deceasedBoolean": "{{msg.DeceasedBoolean}}",
     
      "address": [
-        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
-        {% for p in msg["Address"] -%}
+
         {
-            "use": "{{ p.type}}",
-            "line": "{{p.Street}}",
-            "city": "{{p.City}}",
-            "postalCode": "{{p.ZipCode}}",
-            },
-        {% endfor -%}
+            "use": "home",
+            "line": "{{msg.MEMBER_ADDRESS1}}, {{msg.MEMBER_ADDRESS2}}",
+            "city": "{{msg.MEMBER_CITY}}",
+			"state":"{{msg.MEMBER_STATE}}",
+            "postalCode": "{{msg.MEMBER_ZIP}}",
+	 },
+	  {
+            "use": "work",
+            "line": "{{msg.MEMBER_MAIL_ADDRESS1}}, {{msg.MEMBER_MAIL_ADDRESS2}}",
+            "city": "{{msg.MEMBER_MAIL_CITY}}",
+			"state":"{{msg.MEMBER_MAIL_STATE}}",
+            "postalCode": "{{msg.MEMBER_MAIL_ZIP}}",
+	 },
     ],  
      "maritalStatus":{
             "valueCodeableConcept":
@@ -68,7 +93,7 @@
                     "code": "{{msg.MaritalStatusCode}}",
                     "display":"{{msg.MaritalStatus}}",
                 }],
-                "text": "{{p.MaritalStatus}}"
+                "text": "{{msg.MaritalStatus}}"
             }
 	},
 	"multipleBirthBoolean": "{{msg.MultipleBirth}}",
@@ -93,13 +118,12 @@
                 "end": "{{ p.endDate | add_hyphens_date }}",
             },
          "telecom": [
-            {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
-            {% for c in p.KinPhone -%}    
+           
             {
-                "system": "{{c.PhoneType}}",
-                "value": "{{c.Phone}}",
-            },
-            {% endfor -%}
+                "system": "home",
+                "value": "{{msg.MEMBER_SECONDARY_CONTACT_PHONE}}",
+            }
+            
         ],
          "address":     
             {
@@ -112,14 +136,13 @@
     }], 
   
    "managingOrganization": {
-        "reference": "Organization/{{msg.PatientOrgId}}",	
-        "display": "{{msg.PatientOrg}}"
+        "reference": "Organization/{{msg.CLIENTID}}",	
+        "display": "{{msg.CLIENTNAME}}"
     },
     
 
  "communication":[
-        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
-        {% for p in msg["communication"] -%}
+       
         { 
             "language":{
             "valueCodeableConcept":
@@ -127,21 +150,19 @@
                 "coding":[{
                     "system":"http://hl7.org/fhir/ValueSet/languages",
                     "code": "en",
-                    "display":"{{p.language}}",
+                    "display":"{{msg.PREFERREDSPOKENLANGUAGE}}",
                 }],
-                "text": "{{p.language}}"
+                "text": "{{msg.PREFERREDSPOKENLANGUAGE}}"
             }
         }}
-          {% endfor -%}
+        
      
     ],
 "generalPractitioner": [
-        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
-        {% for p in msg["physician"] -%}
+       
         {
-            "reference": "Practioner/{{p.id}}",
-            "display": "{{p.name}}",
+            "reference": "Practioner/{{msg.PCP_ID}}",
+            "display": "{{msg.PCP_FIRSTNAME}} {{msg.PCP_LASTNAME}}"
             },
-        {% endfor -%}
     ],
 }

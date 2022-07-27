@@ -3,34 +3,85 @@
     "MRN": "M0R1N2",
     "FirstName": "Jerry",
     "LastName": "Smith",
+    "PatientOrg": "ABC org",
+    "PatientOrgId":1,
     "Phone Number": [
         {
-            "PhoneType": "office",
-            "Phone": 11111111
+       "PhoneType": "office",
+       "Phone": "1234-5678"
         },
         {
             "PhoneType": "home",
-            "Phone": 2222222
-        },
-        {
-            "PhoneType": "fax",
-            "Phone": 6666
-        }
+            "Phone": "1234-5378"
+             }
     ],
     "Address": [
         {
-            "Type": "home",
-            "Street": "Test Street 1",
-            "City": "NYC",
-            "ZipCode": 10000
+            "type": "home",
+       "Street": "Test Street ",
+       "City": " NYC",
+       "ZipCode": "10001"
         },
         {
-            "Type": "home",
-            "Street": "Test Street 1",
-            "City": "NYC",
-            "ZipCode": 10000
+            "type": "work",
+       "Street": "Test office Street ",
+       "City": " CA",
+       "ZipCode": "10002"
+        }   ],
+    "MaritalStatusCode": "M",
+    "MaritalStatus": "Married",
+    "MultipleBirth": false,
+        "Gender": "M",
+    "DOB": "20010110",
+    "DeceasedBoolean": "false",
+    "Contact":[
+        {
+           "relationship": "U",
+            "KinName" :
+                {
+                    "firstname" : "test",
+                    "lastname" : "kin"
+                    }
+                   ,
+            "KinPhone": [
+                    {
+                       "PhoneType": "office",
+                       "Phone": "1234-5678"
+                    },{
+                        "PhoneType": "office",
+                        "Phone": "1234-5678"
+                     }],
+                    
+            "KinAddress": 
+                        {
+                            "type": "home",
+                       "Street": "Test Street ",
+                       "City": " NYC",
+                       "ZipCode": "10001"
+                        },
+                        
+            "kinGender" : "female",
+            "organization": "Child Health Clinic",
+            "contOrgId":5,
+            "startDate" : "20200322",
+            "endDate" : "20220322"
+     
+          
+
+    }],
+    "physician":[
+        {
+            "name": "Test, Physianc A",
+            "id": 1
+        },
+        {
+            "name": "Test, Physianc B",
+            "id":2
         }
     ],
-    "Gender": "M",
-    "DOB": "20010110"
+    "communication":[
+        {
+            "language": "English"
+        }]
+
 }

@@ -1,0 +1,80 @@
+{
+    "resourceType": "Practitioner",
+    "id": "{{ msg.PractitionerIdentifier | to_json_string | generate_uuid }}",
+    "active": true,
+    "name": [
+        {
+            "FamilyName": "{{ msg.LastName }}",
+            "GivenName": [
+                "{{ msg.FirstName }}"
+            ]
+        }
+    ],
+    "telecom": [
+        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
+        {% for p in msg["Phone Number"] -%}
+        {
+            "system": "{{p.Phonetype}}",
+	    "Phoneuse": "{{p.workPhone}}",
+            "Phonevalue": "{{ p.PhoneNum }}",
+            },
+        {% endfor -%}
+    ],
+      "address": [
+        {% comment -%} use "[]" to access value if the key contains spaces or other special characters {% endcomment -%}
+        {% for p in msg["Address"] -%}
+        {
+            "use": "{{p.work}}",
+	    "type": "{{p.Type}}",
+            "line": "{{ p.Street }}",
+            "city": "{{ p.City }}",
+		"State": "{{ p.state }}",
+            "postalCode": "{{ p.ZipCode }}",
+	    "country": "{{ p.country }}",
+            },
+        {% endfor -%}
+    ],
+    "gender":   
+        {% if msg.Gender == 'M' -%}
+	        "male",
+        {% elsif msg.Gender == 'F' -%}
+	        "female",
+        {% elsif msg.Gender == 'U' -%}
+	        "unknown",
+        {% elsif code -%}
+	        "other",
+        {% else %}
+            "",
+        {% endif -%}
+    "birthDate": "{{ msg.DOB | add_hyphens_date }}",
+    "qualification": [
+        { 
+           "identifier": [ 
+            {
+                "use": "usual",
+                 "type": {
+                     "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                        "code": "Practitioner Identifier"
+                    }
+                ]
+            }
+        }
+        ],
+           "Period": "action since,
+            "issuer": "institution"
+            },
+            "system": "urn:oid:2.16.840.1.113883.19.5",
+            "value": "{{ msg.Practitioner Id }}"
+        }
+    ],
+     "Communication: {
+        "reference": "communication/2.16.840.1.113883.19.5",
+        "display": "Languge"
+},
+    "managingOrganization": {
+        "reference": "Organization/2.16.840.1.113883.19.5",
+        "display": "Good Health Clinic"
+    }
+}
