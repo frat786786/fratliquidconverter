@@ -1,0 +1,58 @@
+{
+    "PractitionerIdentifier": "12345",
+    "Active": "yes",
+	"Name": [
+	    {	
+   	      "FamilyName": "Smith",
+      	  "GivenName": "Adam",
+      	  "Prefix": "Dr"
+	    }
+	],
+	"Telecom": [
+	    {
+	      "System": "Phone",
+	      "Phoneuse": "work",
+	      "Phonevalue:": 3016003000
+	    },
+  	    {
+	      "System": "Phone",
+	      "Phoneuse": "Mobile",
+	      "Phonevalue:": 3017004000
+	    },
+	    {
+	      "System": "Fax",
+	      "Phoneuse": "Work",
+	      "Phonevalue:": 3018005000
+	    }
+    ],
+   	"address": [
+	    {
+	      "use": "Work",
+	      "type": "Physical",
+	      "Line": "123 Flower St",
+     	  "city": "PleasantVille",
+      	  "state": "MD",
+      	  "postalCode": "20905",
+      	  "country": "USA"
+        },
+  	    {
+	      "use": "Temp",
+	      "type": "Postal",
+	      "Line": "123 Fruit St",
+     	  "city": "PleasureVille",
+      	  "state": "MD",
+      	  "postalCode": "20905",
+      	  "country": "USA"
+    	}
+  	],
+ 	"gender": "M", 
+    "birthdate": "19900712", 
+  	"qualification": [
+    	  {
+      	  "identifier": "2468",
+      	  "period": "2015",
+      	  "issuer": "Medical University"
+	  }
+	],
+	"communication": "English"
+}
