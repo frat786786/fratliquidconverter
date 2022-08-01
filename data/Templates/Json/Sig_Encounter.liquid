@@ -1,0 +1,93 @@
+{
+  "resourceType" : "Encounter",
+    "identifier": [
+       {
+             {% comment -%} not available in source data file {% endcomment -%}
+            "value": "{{ msg.AssessmentIdentificationNumber }}"
+        }
+    ],
+ "status" :
+     {% if msg.Status == 'planned' -%}
+       "planned",
+        {% elsif msg.Status == 'arrived' -%}
+       "arrived",
+        {% elsif msg.Status == 'triaged' -%}
+       "triaged",
+        {% elsif msg.Status == 'in-progress' -%}
+       "in-progress",
+        {% elsif msg.Status == 'onleave' -%}
+       "onleave",
+        {% elsif msg.Status == 'finished' -%}
+       "finished",
+        {% elsif msg.Status == 'cancelled' -%}
+       "cancelled",
+        {% elsif code -%}
+        "other",
+        {% else %}
+            "",
+        {% endif -%}
+ "subject": {
+    "reference": "Patient/{{msg.PatientId}}}",
+  },
+ "type" :
+      {
+          "valueCodeableConcept":
+            {
+                "coding":[{
+                    "system":"http://hl7.org/fhir/ValueSet/encounter-type",
+                    "code": "",
+                    "display":"{{msg.EncounterType}}"
+                }],
+                "text": "{{msg.EncounterType}}"
+            }
+        },
+
+"period": {
+  "start" : "{{msg.AdmissionDate}}",
+},
+"diagnosis":[
+    {
+      "condition": {
+        "display": "Complications from Roel's TPF chemotherapy on January 28th, 2013"
+      },
+      "use": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+            "code": "AD",
+            "display": "{{msg.Diagnosis}}"
+          }
+        ]
+      },
+      "rank": 1
+    },
+],
+  "hospitalization" : {
+    "admitSource" :
+        {
+          "valueCodeableConcept":
+            {
+                "coding":[{
+                    "system":"http://hl7.org/fhir/ValueSet/encounter-admit-source",
+                    "code": "",
+                    "display":"{{msg.AdmitSource}}",
+                }],
+                "text": "{{msg.AdmitSource}}"
+            }
+        }    
+  },
+  "reasonCode": [ {
+          "valueCodeableConcept":
+            {
+                "coding":[{
+                    "system":"http://hl7.org/fhir/ValueSet/encounter-admit-source",
+                    "code": "",
+                    "display":"{{msg.ReasonCode}}",
+                }],
+                "text": "{{msg.ReasonCode}}"
+            }
+        }    
+    ]
+}
+
+ 

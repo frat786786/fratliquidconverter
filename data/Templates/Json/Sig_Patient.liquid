@@ -34,7 +34,8 @@
         {
             "family": "{{ msg.MEMBER_LAST_NAME }}",
             "given": [
-                "{{ msg.MEMBER_FIRST_NAME }}"
+                "{{ msg.MEMBER_FIRST_NAME }}",
+				"{{ msg.MEMBER_MIDDLE_NAME }}"
             ],
             "suffix": [
                 "{{ msg.SUFFIX }}"
@@ -45,6 +46,10 @@
     "telecom": [
         {
             "system": "home",
+            "value": "{{msg.MEMBER_TELEPHONE}}",
+            },
+		{	
+            "system": "other",
             "value": "{{msg.MEMBER_CELL}}",
             },
  		{
@@ -76,6 +81,7 @@
             "city": "{{msg.MEMBER_CITY}}",
 			"state":"{{msg.MEMBER_STATE}}",
             "postalCode": "{{msg.MEMBER_ZIP}}",
+			"country": "{{msg.MEMBER_COUNTY}}",
 	 },
 	  {
             "use": "work",
