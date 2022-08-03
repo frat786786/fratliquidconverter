@@ -45,7 +45,7 @@
     ],
     "telecom": [
         {
-            "system": "home",
+            "system": "phone",
             "value": "{{msg.MEMBER_TELEPHONE}}",
             },
 		{	
@@ -91,17 +91,6 @@
             "postalCode": "{{msg.MEMBER_MAIL_ZIP}}",
 	 },
     ],  
-     "maritalStatus":{
-            "valueCodeableConcept":
-            {
-                "coding":[{
-                    "system":"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
-                    "code": "{{msg.MaritalStatusCode}}",
-                    "display":"{{msg.MaritalStatus}}",
-                }],
-                "text": "{{msg.MaritalStatus}}"
-            }
-	},
 	"multipleBirthBoolean": "{{msg.MultipleBirth}}",
    "Contact": [ {
          {% for p in msg["Contact"] -%}   
@@ -147,23 +136,7 @@
     },
     
 
- "communication":[
-       
-        { 
-            "language":{
-            "valueCodeableConcept":
-            {
-                "coding":[{
-                    "system":"http://hl7.org/fhir/ValueSet/languages",
-                    "code": "en",
-                    "display":"{{msg.PREFERREDSPOKENLANGUAGE}}",
-                }],
-                "text": "{{msg.PREFERREDSPOKENLANGUAGE}}"
-            }
-        }}
-        
-     
-    ],
+ 
 "generalPractitioner": [
        
         {
@@ -172,17 +145,31 @@
             },
     ],
 "extension":[
-       
-        { 
-            
-                "valueCoding":{
-                    "system":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
-                    
-                    "display":"{{msg.ETHNICITY}}",
-                }
-		}
+	{
+       "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+		"extension": [
+			{
+				 "url": "text",
+				 "valueString":"{{msg.ETHNICITY}}"
+			}
+		]}
 
         
      
     ],
+"communication":[
+       
+        { 
+            "language":{
+            "coding":
+            {
+                     "system":"http://hl7.org/fhir/ValueSet/languages",
+                    "display":"{{msg.PREFERREDSPOKENLANGUAGE}}",
+
+            }
+        }}
+        
+     
+    ],
+
 }
