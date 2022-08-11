@@ -1,0 +1,112 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "{{msg.id}}",
+  "text": {
+    "status": "generated",
+    "div": "{{ msg.text.div | escape_special_chars }}"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "{{msg.contained.id}}",
+      "code": {
+        "coding": [
+           {% for c in msg.code.coding-%}
+          {
+            "system": "{{c.system}},
+            "code": "{{c.code}}",
+            "display": "{{c.display}}"
+          },
+          {% endfor -%}
+        ]
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "use": "{{msg.identifier.use}}",
+      "system": "{{msg.identifier.system}}",
+      "value": "{{msg.identifier.value}}"
+    }
+  ],
+  "status": "{{msg.status}}",
+  "intent": "{{msg.intent}}",
+  "medicationReference": {
+    "reference": "{{msg.medicationReference.reference}}",
+    "display": "{{msg.medicationReference.display}}"
+  },
+  "subject": {
+    "reference": "{{msg.subject.reference}}",
+    "display": "{{msg.subject.display}}"
+  },
+  "authoredOn": "{{msg.DateofService | date: "%y-%m-%d"}}",
+  "requester": {
+    "reference": "{{msg.requester.reference}}",
+    "Provider_LastName": "{{msg.requester.Provider_LastName}}",
+    "Provider_FirstName": "{{msg.requester.Provider_FirstName}}"
+  },
+  "dosageInstruction": [
+    {% for d in msg.dosageInstruction -%}
+    {
+      "sequence": 1,
+      "text": "{{d.text}}",
+      "timing": {
+        "repeat": {
+          {% for r in d.timing.repeat -%}
+          "frequency": {{r.frequency}},
+          "period": {{r.period}},
+          "periodUnit": "{{r.periodUnit}}"
+        },
+        {% endfor -%}
+      },
+      "doseAndRate": [
+        {
+          "type": {
+            "coding": [
+                {% for c in d.doseAndRate.type.coding -%}
+              {
+                "system": "{{c.system}}",
+                "code": "{{c.code}}",
+                "display": "{{c.display}}"
+              }
+                 {% endfor -%}
+            ]
+          },
+          "doseQuantity": {
+            "value": {{d.doseAndRate.doseQuanity.value}},
+            "unit": "{{d.doseAndRate.doseQuantity.unit}}",
+            "system": "{{d.doseAndRate.doseQuantity.system}}",
+            "code": "{{d.doseAndRate.doseQuantity.code}}"
+          }
+        }
+      ]
+    },
+    {% endfor -%}
+  ],
+  "dispenseRequest": {
+     {% for dr in msg.dispenseRequest -%}
+    "validityPeriod": {
+      "start": "{{dr.validityPeriod.start | date: "%y-%m-%d"}}",
+      "end": "{{dr.validityPeriod.end | date: "%y-%m-%d"}}"
+    },
+    "numberOfRepeatsAllowed": {{dr.numberOfRepeatsAllowed}},
+    "quantity": {
+      "value": {{dr.quantity.value}},
+      "unit": "{{dr.quantity.unit}}",
+      "system": "{{dr.quantity.system}}",
+      "code": "{{dr.quantity.code}}"
+    },
+    "expectedSupplyDuration": {
+      "value": {{dr.expectedSupplyDuration.value}},
+      "unit": "{{dr.expectedSupplyDuration.unit}}",
+      "system": "{{dr.expectedSupplyDuration.system}}",
+      "code": "{{dr.expectedSupplyDuration.code}}"
+    }
+    {% endfor -%}
+  }
+}
+
+   {% comment -%} 
+   1. system can be hardcoded
+   2. unit can be hardcoded
+    {% endcomment -%}

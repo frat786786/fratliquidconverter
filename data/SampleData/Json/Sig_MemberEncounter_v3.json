@@ -1,0 +1,10 @@
+{
+    "AssessmentIdentificationNumber": 12434,
+    "Status": "planned",
+    "AdmissionDate": "2022-07-22",
+    "AdmitSource": "Smith",
+    "Diagnosis": "Admission diagnosis",
+    "PatientId": 1,
+    "EncounterType": "other",
+    "ReasonCode": "The patient is treated for a tumor."
+}

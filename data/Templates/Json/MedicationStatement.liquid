@@ -1,0 +1,235 @@
+{
+  "resourceType": "MedicationStatement",
+  "id": "{{msg.id}}",
+  "text": {
+    "status": "generated",
+    "div": "{{msg.text.div | escape_special_chars}}"
+  },
+  "contained": [
+    {
+      "resourceType": "Medication",
+      "id": "{{msg.contained.id}}",
+      "code": {
+        "coding": [
+          {% for c in msg.code.coding-%}
+          {
+            "system": "{{c.system}}",
+            "code": "5{{c.code}}",
+            "display": "{{c.display}}"
+          },
+          {% endfor -%}
+        ]
+      },
+      "form": {
+        "coding": [
+          {% for c in msg.form.coding-%}
+          {
+            "system": "{{c.system}}",
+            "code": "{{c.code}}",
+            "display": "{{c.display}}"
+          },
+          {% endfor -%}
+        ]
+      },
+      "ingredient": [
+        {% for i in msg.ingredient -%}
+        {
+          "itemCodeableConcept": {
+            {% for icc in i.itemCodeableConcept -%}
+            "coding": [
+              {% for c in icc.coding-%}
+              {
+                "system": "{{c.system}}",
+                "code": "{{c.code}}",
+                "display": "{{c.display}}"
+              },
+              {% endfor -%}
+            ],
+            {% endfor -%}
+          },
+          "strength": {
+            {% for s in i.strength -%}
+            "numerator": {
+              "value": {{s.numerator.value}},
+              "system": "{{s.numerator.system}}",
+              "code": "{{s.numerator.code}}"
+            },
+            "denominator": {
+              "value": {{s.denominator.value}},
+              "system": "{{s.denominator.system}}",
+              "code": "{{s.denominator.code}}"
+            },
+            {% endfor -%}
+          }
+        },
+        {
+          "itemCodeableConcept": {
+            "coding": [
+              {% for c in icc.coding-%}
+              {
+                "system": "{{c.system}}",
+                "code": "{{c.code}}",
+                "display": "{{c.display}}"
+              }
+              {% endfor -%}
+            ]
+          },
+          "strength": {
+            {% for s in i.strength -%}
+            "numerator": {
+              "value": {{s.numerator.value}},
+              "system": "{{s.numerator.system}},
+              "code": "{{s.numerator.code}}"
+            },
+            "denominator": {
+              "value": {{s.denominator.value}},
+              "system": "{{s.denominator.system}}",
+              "code": "T{{s.denominator.code}}"
+            },
+            {% endfor -%},
+          },
+        },
+      {% endfor -%}
+      ],
+      "batch": {
+        "lotNumber": "{{msg.batch.lotNumber}}",
+        "expirationDate": "{{msg.expirationDate | date: "yyyy-MM-dd"}}"
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "use": "{{msg.identifier.use}}",
+      "system": "{{msg.identifier.system}}",
+      "value": "{{msg.identifier.value}}"
+    }
+  ],
+  "status": "{{msg.status}}",
+  "category": {
+    "coding": [
+      {% for c in msg.category.coding -%}
+      {
+        "system": "{{c.system}}",
+        "code": "{{c.code}}",
+        "display": "{{c.display}}"
+      },
+      {% endfor -%}
+    ]
+  },
+  "medicationReference": {
+    "reference": "{{msg.medicationReference.reference}}"
+  },
+  "subject": {
+    "reference": "Patient/name",
+    "display": "{{subject.display}}"
+  },
+  "effectiveDateTime": "{{msg.effectiveDateTime | date: "yyyy-MM-dd"}}",
+  "dateAsserted": "{{msg.dateAsserted | date: "yyyy-MM-dd"}}",
+  "informationSource": {
+    "reference": "Patient/name",
+    "display": "{{msg.informationSource.display}}"
+  },
+  "derivedFrom": [
+    {
+      "reference": "{{msg.derivedFrom.reference}}"
+    }
+  ],
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "{{msg.reasonCode.coding.system}}",
+          "code": "{{msg.reasonCode.coding.code}}",
+          "display": "{{reasonCode.coding.display}}"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "{{msg.note.text}}"
+    }
+  ],
+  "dosage": [
+    {% for d in msg.dosage -%}
+    {
+      "sequence": {{d.sequence}},
+      "text": "{{d.text}}",
+      "additionalInstruction": [
+        {
+          "text": "{{d.additionalInstruction.text}}"
+        }
+      ],
+      "timing": {
+        {% for t in d.timing -%}
+        "repeat": {
+          "frequency": {{t.repeat.frequency}},
+          "period": {{t.repeat.period}},
+          "periodUnit": "{{t.repeat.periodUnit}}"
+        }
+       {% endfor -%}
+      },
+      "asNeededCodeableConcept": {
+        {% for ncc in d.asNeededCodeableConcept -%}
+        "coding": [
+          {
+            "system": "{{ncc.coding.system}}",
+            "code": "{{ncc.coding.code}}",
+            "display": "{{ncc.coding.display}}"
+          }
+        ],
+       {% endfor -%}
+      },
+      "route": {
+       {% for r in d.route -%}
+        "coding": [
+          {
+            "system": "{{r.coding.system}}",
+            "code": "{{r.coding.code}}",
+            "display": "{{r.coding.display}}"
+          }
+        ],
+       {% endfor -%}
+      },
+      "doseAndRate": [
+        {
+          "type": {
+            {% for t in d.doseAndRate.type -%}
+            "coding": [
+              {
+                "system": "{{t.coding.system}}",
+                "code": "{{t.coding.code}}",
+                "display": "{{t.coding.display}}"
+              }
+            ],
+           {% endfor -%}
+          },
+          "doseRange": {
+            {% for dr in d.doseAndRate.doseRange -%}
+            "low": {
+              "value": {{dr.low.value}},
+              "unit": "{{dr.low.unit}}",
+              "system": "{{dr.low.system}}",
+              "code": "{{dr.low.code}}"
+            },
+            "high": {
+              "value": {{dr.high.value}},
+              "unit": "{{dr.high.unit}}",
+              "system": "{{dr.high.system}}",
+              "code": "{{dr.high.code}}"
+            },
+            {% endfor -%}
+          }
+        }
+      ]
+    },
+    {% endfor -%}
+  ]
+}
+
+   {% comment -%} 
+   1. system can be hardcoded in all the fields
+   2. unit can be hardcoded in the doseRange field
+   
+   
+    {% endcomment -%}

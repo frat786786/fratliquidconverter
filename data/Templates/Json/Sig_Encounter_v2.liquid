@@ -1,0 +1,126 @@
+{
+  "resourceType": "Encounter",
+  "id": "{{msg.id}}",
+  "text": {
+    "status": "generated",
+    "div": "{{msg.text.div | escape_special_chars}}"
+  },
+  "identifier": [
+    {
+      "use": "{{msg.identifier.use}}",
+      "system": "{{msg.identifier.system}}",
+      "value": "{{msg.identifier.value}}"
+    
+    }
+  ],
+ "status" :
+  {% if msg.Status == 'planned' -%}
+    "planned",
+     {% elsif msg.Status == 'arrived' -%}
+    "arrived",
+     {% elsif msg.Status == 'triaged' -%}
+    "triaged",
+     {% elsif msg.Status == 'in-progress' -%}
+    "in-progress",
+     {% elsif msg.Status == 'onleave' -%}
+    "onleave",
+     {% elsif msg.Status == 'finished' -%}
+    "finished",
+     {% elsif msg.Status == 'cancelled' -%}
+    "cancelled",
+     {% elsif code -%}
+     "other",
+     {% else %}
+         "",
+     {% endif -%}
+
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "{{msg.class.code}}",
+    "display": "{{msg.class.display}}"
+  },
+  "type": [
+  {% for t in msg.type -%}
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{t.coding.code}}",
+          "display": "{{t.coding.display}}",
+        }
+      ]
+    }
+         {% endfor -%}
+  ],
+  "priority": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "310361003",
+        "display": "Non-urgent cardiological admission"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/f001",
+    "display": "{{msg.subject.display}}"
+  },
+  "participant": [
+  {% for p in msg.participant -%}
+    {
+      "individual": {
+        "reference": "Practitioner/f002",
+        "display": "{{p.individual.display}}"
+      }
+    }
+      {% endfor -%}
+  ],
+  "length": {
+    "value": {{msg.length.value}},
+    "unit": "min",
+    "system": "http://unitsofmeasure.org",
+    "code": "min"
+  },
+  "reasonCode": [
+    {% for r in msg.participant -%}
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{r.coding.code}}",
+          "display": "{{r.coding.display}}"
+        }
+      ]
+    }
+    {% endfor -%}
+  ],
+  "hospitalization": {
+    "preAdmissionIdentifier": {
+      "use": "official",
+      "system": "http://www.amc.nl/zorgportal/identifiers/pre-admissions",
+      "value": "{{msg.hospitalization.preAdmissionIdentifier.value}}"
+    },
+    "admitSource": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.admitSource.coding.code}}"
+        }
+      ]
+    },
+    "dischargeDisposition": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.dischargeDisposition.coding.code}}",
+          "display": "{{msg.dischargeDisposition.coding.display}}",
+        }
+      ]
+    }
+  },
+  "serviceProvider": {
+    "reference": "Organization/f001",
+    "display": "{{msg.serviceProvider.display}}"
+  }
+}

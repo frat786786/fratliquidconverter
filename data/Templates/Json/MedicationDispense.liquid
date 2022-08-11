@@ -1,0 +1,124 @@
+{
+    "resourceType": "MedicationDispense",
+    "id": "{{msg.id}}",
+    "text": {
+      "status": "generated",
+      "div": "{{msg.text.div | escape_special_chars }}"
+    },
+    "contained": [
+      {
+        "resourceType": "Medication",
+        "id": "{{msg.contained.id}}",
+        "code": {
+          "coding": [
+              {% for c in msg.code.coding -%}
+              {
+              "system": "{{c.system}}",
+              "code": "{{c.code}}",
+              "display": "{{c.display}}"
+            },
+            {% endfor -%}
+          ]
+        }
+      }
+    ],
+    "status": "{{msg.DispensingStatus}}",
+    "medicationReference": {
+      "reference": "{{msg.medicationReference.reference}}"
+    },
+    "subject": {
+      "reference": "patient/identifier",
+      "display": "{{msg.subject.display}}"
+    },
+    "performer": [
+      {"actor": {
+          "reference": "{{msg.performer.actor.reference}}"
+        }
+      }
+    ],
+    "authorizingPrescription": [
+      {
+        "reference": "{{msg.authorizingPrescription.reference}}"
+      }
+    ],
+    "type": {
+    "coding": [
+      {% for c in msg.coding-%}
+      {
+        "system": "{{c.system}}",
+        "code": "{{c.code}}",
+        "display": "{{c.display}}"
+      },
+      {% endfor -%}
+    ]
+  },
+  "quantity": {
+    "value": {{msg.quantity.QuantityDispensed}},
+    "system": "{{msg.quantity.system}}",
+    "code": "{{msg.quantity.code}}"
+  },
+  "daysSupply": {
+    "value": {{msg.daysSupply.DaysSupply}},
+    "unit": "{{msg.daysSupply.unit}}",
+    "system": "{{msg.daysSupply.system}}",
+    "code": "{{msg.daysSupply.code}}"
+  },
+  "whenPrepared": "{{msg.DateOfService | date: "yyyyMMdd"}}",
+  "dosageInstruction": [
+      {% for d in msg.dosageInstruction-%}
+      {
+        "sequence": {{d.sequence}},
+        "timing": {
+        
+          "repeat": {
+            {% for r in d.timing.repeat-%}
+            "frequency": {{r.frequency}},
+            "period": {{r.period}},
+            "periodUnit": "{{r.periodUnit}}"
+          },
+          {% endfor -%}
+        },
+        "route": {
+          "coding": [
+            {% for c in d.route.coding-%}
+            {
+              "system": "{{c.system}}",
+              "code": "{{c.code}}",
+              "display": "{{c.display}}"
+            },
+            {% endfor-%}
+          ]
+        },
+       
+        "doseAndRate": [
+          {
+            "type": {
+              "coding": [
+                {% for c in d.doseAndRate.type.coding -%}
+                {
+                  "system": "{{c.system}}",
+                  "code": "{{c.code}}",
+                  "display": "{{c.display}}"
+                },
+                {% endfor -%}
+              ]
+            }, 
+            "doseQuantity": {
+            {% for dq in d.doseQuantity -%}
+              "value": {{dq.value}},
+              "unit": "{{dq.unit}}",
+              "system": "{{dq.system}}",
+              "code": "{{dq.code}}"
+            },
+            {% endfor -%}
+          }
+        ]
+      },
+      {% endfor -%}
+    ]
+  }
+     {% comment -%} 
+     1. system can be hardcoded
+     2. unit can be hardcoded 
+     3. period unit can be hardcoded
+     {% endcomment -%}

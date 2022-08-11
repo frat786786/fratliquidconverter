@@ -1,0 +1,153 @@
+{
+  "resourceType": "Practitioner",
+  "id": "{{ msg.PractitionerId | to_json_string | generate_uuid }}",
+  "identifier": [
+	 {
+		"use": "usual",
+		"type": {
+			 "coding": [
+			 {
+				 {% comment -%}	FR   {% endcomment -%}
+				 "system": "http://terminology.hl7.org/ValueSet/v2-0338",
+ {% comment -%}	FR - CODE - should represent the actual code mentioned on system website
+		it seems we do not have in input data, can we hardcode this to any of the code 
+		which relates to this provider id. 
+ {% endcomment -%}				 
+				 "code": "providerid"
+			 }
+                ]
+            },
+         
+            "value": "{{ msg.PROVIDER_ID }}"
+        },
+		 {
+		"use": "usual",
+		"type": {
+			 "coding": [
+			 {
+{% comment -%}	 SYSTEM -  can we use SYSTEM value as  - http://terminology.hl7.org/CodeSystem/v2-0203 
+					CODE - NPI
+ {% endcomment -%}				 
+				 "system": "http://terminology.hl7.org/ValueSet/v2-0338",
+				 "code": "providernpi"
+			 }
+                ]
+            },
+         
+            "value": "{{ msg.PROVIDER_NPI }}"
+        }
+    ],
+    "active": true,
+    "name": [
+        { 
+    "use": "official",
+ {% comment -%} updated "text": "Sheena Patel",    to
+				below "text" code
+ {% endcomment -%}	
+"text": "{{ msg.PROVIDER_LASTNAME }} {{ msg.PROVIDER_FIRSTNAME }}", 
+		"family": "{{ msg.PROVIDER_LASTNAME }}",
+            "given": [
+                "{{ msg.PROVIDER_FIRSTNAME }}",
+ 				"{{ msg.PROVIDER_MIDDLENAME }}"
+ {% comment -%} added middle name - above line
+ {% endcomment -%}
+				
+            ],
+            "prefix": [
+                "{{ msg.PROVIDER_PREFIX}}"
+            ],
+
+        }
+    ],
+
+    "telecom": [
+        {
+            "system": "phone",
+            "value": "{{msg.PROVIDER_PHONEPRIMARY}}",
+            },
+		{
+ 			"system": "phone",
+            "value": "{{msg.PROVIDER_PHONESECONDARY}}",
+            },
+{
+{% comment -%} ContactPoint datatype does not have 
+			"Personalphone" defined as system, 
+			can we use some other defined code - 
+			refer - https://www.hl7.org/fhir/datatypes.html#ContactPoint
+ {% endcomment -%}
+ "system": "Personalphone",
+	"use":"mobile",
+            "value": "{{msg.PROVIDER_CONTACT}}",
+            },
+{
+ "system": "fax",
+            "value": "{{msg.PROVIDER_FAX}}",
+            },
+ 		{
+            "system": "email",
+            "value": "{{msg.PROVIDER_EMAIL}}",
+            },
+    ],  
+  "address": [
+
+        {
+            "use": "billing",
+		"type": "physical",
+            "line": "{{msg.PROVIDER_ADDRESS1}}, {{msg.PROVIDER_ADDRESS2}},{{msg.PROVIDER_ADDRESS3}}",
+            "city": "{{msg.PROVIDER_CITY}}",
+	"state":"{{msg.PROVIDER_STATE}}",
+            "postalCode": "{{msg.PROVIDER_ZIP}}",
+{% comment -%} DISTRICT - can it be replaced with COUNTRY
+{% endcomment -%}
+	"district": "{{msg.PROVIDER_COUNTY}}",
+	 },
+	  {
+            "use": "work",
+			"type": "physical",
+            "line": "{{msg.PROVIDER_ADDRESS1}}, {{msg.PROVIDER_ADDRESS2}},{{msg.PROVIDER_ADDRESS3}}",
+            "city": "{{msg.PROVIDER_CITY}}",
+			"state":"{{msg.PROVIDER_STATE}}",
+            "postalCode": "{{msg.PROVIDER_ZIP}}",
+	 },
+    ], 
+ "gender":   
+        {% if msg.PROVIDER_GENDER == '1' -%}
+	        "male",
+        {% elsif msg.PROVIDER_GENDER == '2' -%}
+	        "female",
+        {% elsif msg.PROVIDER_GENDER == '3' -%}
+	        "other",
+        {% elsif code -%}
+.	        "unknown",
+        {% else %}
+            "",
+        {% endif -%}
+"birthDate": "{{ msg.PROVIDER_DOB}}",
+ "communication":[
+       
+        { 
+            "language":{
+            "valueCodeableConcept":
+            {
+                "coding":[{
+                    "system":"http://hl7.org/fhir/ValueSet/languages",
+                    "code": "en",
+                    "display":"{{msg.PROVIDER_LANGUAGE}}",
+                }],
+                "text": "{{msg.PROVIDER_LANGUAGE}}"
+            }
+        }}
+        
+     
+    ],
+ 
+{% comment -%} ADD BELOW FIELDS
+1. PROVIDER_SPECIALITY_CODE, PROVIDER_SPECIALITY_DESC - "qualification"
+2. PROVIDER_PIN - can this be mapped as an identifier
+3. PROVIDER_TAXONOMY_CODE - Identifier  
+	coding system - http://hl7.org/fhir/ValueSet/provider-taxonomy 
+4. PROVIDER_TAXID - Identifier 
+	coding system - http://hl7.org/fhir/v2/0203
+
+{% endcomment -%}
+}
