@@ -50,6 +50,18 @@
       ]
     }
   ],
+  "serviceType": 
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "",
+          "display": "{{msg.EncounterType}}",
+        }
+      ]
+    },
+
+
    "priority": {
     "coding": [
       {
@@ -64,16 +76,48 @@
     "reference": "Patient/{{msg.PatientId}}",
     "display": "{{msg.subject.display}}"
   },
+  "episodeOfCare": {
+    "reference": "EpisodeOfCare/{{msg.EpisodeOfCareId}}",
+    "display": "{{msg.episodeOfCare.display}}"
+  },
+  "basedOn": {
+    "reference": "ServiceRequest/{{msg.basedOn}}",
+    "display": "{{msg.basedOn.display}}"
+  },
+  
   "participant": [
 
     {
+    "type": 
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "",
+          "display": "{{msg.type}}",
+        }
+      ]
+    },
+
       "individual": {
         "reference": "Practitioner/f002",
         "display": "{{p.individual.display}}"
-      }
+      },
+     "period": {
+    "start" : "{{msg.start}}",
+},
+
     }
 
   ],
+"appointment": {
+    "reference": "Appointment/{{msg.appt}}",
+    "display": "{{msg.appointment.date}}"
+  },
+ "period": {
+  "start" : "{{msg.AdmissionDate}}",
+},
+
   "length": {
     "value": "",
     "unit": "min",
@@ -93,35 +137,10 @@
     }
  
   ],
- 
-  "hospitalization": {
-    "preAdmissionIdentifier": {
-      "use": "official",
-      "system": "http://www.amc.nl/zorgportal/identifiers/pre-admissions",
-      "value": ""
-    },
-    "admitSource": {
-      "coding": [
-        {
-          "system": "http://snomed.info/sct",
-          "code": "{{msg.admitSource.coding.code}}",
-          "display": "{{msg.AdmitSource}}"
-        }
-      ]
-    },
-    "dischargeDisposition": {
-      "coding": [
-        {
-          "system": "http://snomed.info/sct",
-          "code": "{{msg.dischargeDisposition.coding.code}}",
-          "display": "{{msg.dischargeDisposition.coding.display}}",
-        }
-      ]
-    }
+  "reasonReference": {
+    "reference": "Condition/{{msg.reasonref}}",
+    "display": "{{msg.reasonRefernece}}"
   },
-  "period": {
-  "start" : "{{msg.AdmissionDate}}",
-},
 "diagnosis":[
     {
       "condition": {
@@ -139,6 +158,109 @@
       "rank": 1
     },
 ],
+ 
+  "hospitalization": {
+    "preAdmissionIdentifier": {
+      "use": "official",
+      "system": "http://www.amc.nl/zorgportal/identifiers/pre-admissions",
+      "value": ""
+    },
+"origin": {
+    "reference": "Location/{{msg.location}}",
+    "display": "{{msg.location}}"
+  },
+    "admitSource": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.AdmitSource}}"
+        }
+      ]
+    },
+"reAdmission": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.readmission}}"
+        }
+      ]
+    },
+"dietPreference": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.readmission}}"
+        }
+      ]
+    },
+  "specialCourtesy": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.readmission}}"
+        }
+      ]
+    },
+    "specialArrangement": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.admitSource.coding.code}}",
+          "display": "{{msg.readmission}}"
+        }
+      ]
+    },
   
+  "destination": {
+    "reference": "Location/{{msg.location}}",
+    "display": "{{msg.location}}"
+  },
+
+  
+    "dischargeDisposition": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.dischargeDisposition.coding.code}}",
+          "display": "{{msg.dischargeDisposition.coding.display}}",
+        }
+      ]
+    }
+  },
+  
+ "location": {
+  "location": {
+    "reference": "Location/{{msg.location}}",
+    "display": "{{msg.location}}"
+  },
+  "status":"planned",
+   
+  "physicalType": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "{{msg.dischargeDisposition.coding.code}}",
+          "display": "{{msg.dischargeDisposition.coding.display}}",
+        }
+      ]
+    },
+     "period": {
+    "start" : "{{msg.start}}",
+},
+
+    },
+
+ "serviceProvider": {
+    "reference": "Organization/{{msg.orgId}}",
+    "display": "{{msg.orgId}}"
+  },
+  "partOf": {
+    "reference": "Encounter/{{msg.encId}}",
+    "display": "{{msg.encId}}"
+  },
 
  }
